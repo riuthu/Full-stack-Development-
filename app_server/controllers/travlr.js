@@ -1,9 +1,30 @@
-var fs = require('fs');
+const tripsEndpoint = 'http://localhost:3000/api/trips';
+const options = {
+  method: 'GET',
+  headers: {
+    'Accept': 'application/json'
+  }
+};
 
-/* GET travel page */
-const travel = (req, res) => {
-  var trips = JSON.parse(fs.readFileSync('./data/trips.json', 'utf8'));
-  res.render('travel', { title: 'Travlr', trips: trips });
+// GET travel page
+const travel = async (req, res) => {
+  await fetch(tripsEndpoint, options)
+    .then(res => res.json())
+    .then(json => {
+      let trips = [];
+      let message = null;
+      if (!(json instanceof Array)) {
+        message = 'API lookup error';
+      } else {
+        if (!json.length) {
+          message = 'No trips found';
+        } else {
+          trips = json;
+        }
+      }
+      res.render('travel', { title: 'Travlr Getaways', trips, message });
+    })
+    .catch(err => res.status(500).send(err.message));
 };
 
 /* GET news page */
@@ -57,4 +78,3 @@ module.exports = {
   about,
   contact
 };
-
