@@ -8,4 +8,10 @@ router.get('/trips', tripsController.tripsList);
 // GET single trip by trip code
 router.get('/trips/:tripCode', tripsController.tripsFindCode);
 
+// POST new trip
+router.post('/trips', tripsController.tripsAddTrip);
+
+// PUT update trip
+router.put('/trips/:tripCode', tripsController.tripsUpdateTrip);
+
 module.exports = router;
